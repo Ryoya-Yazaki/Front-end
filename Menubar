@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>フレキシブルなメニューバー</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            padding-top: 60px; /* ヘッダーの高さ分のパディング */
+            height: 2000px; /* スクロールのためのダミーの高さ */
+        }
+        
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            transition: transform 0.3s ease-in-out;
+            z-index: 1000;
+        }
+        
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+        
+        .navbar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            padding: 15px 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .menu {
+            display: flex;
+            flex-wrap: wrap;
+            list-style-type: none;
+        }
+        
+        .menu li {
+            padding: 20px 15px;
+        }
+        
+        .menu li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .menu li a:hover {
+            color: #f8c12c;
+        }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            padding: 15px 0;
+        }
+        
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .menu {
+                flex-basis: 100%;
+                flex-direction: row;
+                justify-content: center;
+                border-top: 1px solid #444;
+                display: none;
+            }
+            
+            .menu.active {
+                display: flex;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .menu {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .menu li {
+                width: 100%;
+                text-align: center;
+                padding: 15px 0;
+            }
+            
+            /* ハンバーガーメニューがアクティブなときのアニメーション */
+            .hamburger.active div:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 6px);
+            }
+            
+            .hamburger.active div:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .hamburger.active div:nth-child(3) {
+                transform: rotate(-45deg) translate(5px, -6px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header id="header">
+        <nav class="navbar">
+            <div class="logo">サイト名</div>
+            <div class="hamburger" id="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <ul class="menu" id="menu">
+                <li><a href="#">ホーム</a></li>
+                <li><a href="#">サービス</a></li>
+                <li><a href="#">製品</a></li>
+                <li><a href="#">会社情報</a></li>
+                <li><a href="#">ブログ</a></li>
+                <li><a href="#">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="content">
+        <h1 style="text-align: center; margin-top: 50px;">スクロールしてメニューバーの動作を確認してください</h1>
+        <p style="text-align: center; margin-top: 20px;">
+            ・画面を縮小すると、メニューが2段になります<br>
+            ・さらに縮小すると、ハンバーガーメニューになります<br>
+            ・下にスクロールするとメニューが隠れ、上にスクロールすると再表示されます
+        </p>
+    </div>
+
+    <script>
+        // ハンバーガーメニューの制御
+        const hamburger = document.getElementById('hamburger');
+        const menu = document.getElementById('menu');
+        
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            menu.classList.toggle('active');
+        });
+        
+        // スクロールによるヘッダーの表示/非表示制御
+        const header = document.getElementById('header');
+        let lastScrollTop = 0;
+        
+        window.addEventListener('scroll', () => {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // 下にスクロールしたとき（かつ少し以上スクロールしたとき）
+            if (scrollTop > lastScrollTop && scrollTop > 50) {
+                header.classList.add('header-hidden');
+            } 
+            // 上にスクロールしたとき
+            else if (scrollTop < lastScrollTop) {
+                header.classList.remove('header-hidden');
+            }
+            
+            lastScrollTop = scrollTop;
+        });
+    </script>
+</body>
+</html>
+
